@@ -15,11 +15,13 @@ from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.feature import StandardScaler
 from pyspark.ml.classification import RandomForestClassificationModel
 
+S3_BUCKET = "s3://wine-prediction-bucket/"
+
 ######################### Creating Spark Session ########################
 spark = SparkSession.builder.master("local").appName("wineClasssification").getOrCreate()
 
 ######################### Reading Dataset########################
-testDf = spark.read.csv('TestDataset.csv',header='true', inferSchema='true', sep=';')
+testDf = spark.read.csv(S3_BUCKET + 'TestDataset.csv',header='true', inferSchema='true', sep=';')
 #testDf = spark.read.csv('hdfs://ip-172-31-19-75.ec2.internal:8020/TestDataset.csv',header='true', inferSchema='true', sep=';')
 feature = [c for c in testDf.columns if c != 'quality']
 assembler_test = VectorAssembler(inputCols=feature, outputCol="features")
@@ -27,7 +29,7 @@ test_trans = assembler_test.transform(testDf)
 #test_trans.printSchema() 
 
 ######################### Loading Model ############################
-model= RandomForestClassificationModel.load("wine_train_model")
+model= RandomForestClassificationModel.load(S3_BUCKET + "wine_train_model")
 
 ######################### Predicting ##########################
 predictions = model.transform(test_trans)

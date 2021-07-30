@@ -16,14 +16,15 @@ from pyspark.ml.feature import StandardScaler
 from pyspark.mllib.util import MLUtils
 from pyspark.mllib.evaluation import MulticlassMetrics
 
+S3_BUCKET = "s3://wine-prediction-bucket/"
 
 ######################### Creating Spark Session ########################
 spark = SparkSession.builder.master("local").appName("WineQualityPrediction").config("spark.some.config.option","some-value").getOrCreate()
 
 ######################### Reading Dataset   Training Dataset ###########################
-trainDf = spark.read.csv('TrainingDataset.csv',header='true', inferSchema='true', sep=';')
+trainDf = spark.read.csv(S3_BUCKET + 'TrainingDataset.csv',header='true', inferSchema='true', sep=';')
  ########### Validation dataset ###############
-valDf = spark.read.csv('ValidationDataset.csv',header='true', inferSchema='true', sep=';')                                      
+valDf = spark.read.csv(S3_BUCKET + 'ValidationDataset.csv',header='true', inferSchema='true', sep=';')
 
 
 ######################### Creating Feature column #########################
@@ -43,7 +44,7 @@ val_trans = assembler_v.transform(valDf)
 from pyspark.ml.classification import RandomForestClassifier
 random_forest = RandomForestClassifier(labelCol="quality", featuresCol="features", numTrees=10)
 model = random_forest.fit(train_trans)
-model.save("wine_train_model")
+model.save(S3_BUCKET + "wine_train_model")
 
 print("Model Trained Sucessfully")
 

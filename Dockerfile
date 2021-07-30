@@ -28,7 +28,7 @@ RUN apk update && apk add --no-cache libc6-compat
 RUN BLAS=~/src/BLAS/libfblas.a LAPACK=~/src/lapack-3.5.0/liblapack.a pip install -v numpy==1.14
 
 RUN  pip3 install wheel
-RUN  pip3 install pyspark==2.3.2 --no-cache-dir
+RUN  pip3 install pyspark==3.1.2 --no-cache-dir
 RUN  pip3 install findspark
 RUN  pip3 install numpy
 
