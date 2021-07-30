@@ -32,9 +32,11 @@ RUN  pip3 install pyspark==3.1.2 --no-cache-dir
 RUN  pip3 install findspark
 RUN  pip3 install numpy
 
-COPY docker_testing.py docker_testing.py
+COPY testing.py testing.py
+COPY training.py training.py
 COPY TestDataset.csv TestDataset.csv
 COPY TrainingDataset.csv TrainingDataset.csv
+COPY ValidationDataset.csv ValidationDataset.csv
 COPY wine_train_model wine_train_model
 RUN ls -la /*
 #### OPTIONAL :  SET JAVA_HOME environment variable, uncomment the line below if you need it
@@ -43,4 +45,4 @@ RUN ls -la /*
 ####
 
 #ADD test.py /
-CMD ["python3", "docker_testing.py"]
+CMD ["python3", "testing.py"]
